@@ -1,0 +1,2 @@
+JSHint plugin for Gedit
+=======================
