@@ -5,6 +5,7 @@ IAge=3
 Name=JSHint
 Description=Check your JavaScript code with JSHint.
 Description[fr]=Analyser du code JavaScript avec JSHint.
+Icon=emblem-default
 Authors=Xavier Gendre <gendre.reivax@gmail.com>
 Copyright=Copyright © 2016 Xavier Gendre
 Website=https://github.com/meseira/gedit-jshint
