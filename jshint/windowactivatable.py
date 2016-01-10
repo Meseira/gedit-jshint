@@ -33,5 +33,3 @@ class WindowActivatable(GObject.Object, Gedit.WindowActivatable):
 
     def do_update_state(self):
         pass
-
-# ex:ts=4:et:

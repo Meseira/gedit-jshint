@@ -16,5 +16,3 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from .windowactivatable import WindowActivatable
-
-# ex:ts=4:et:
