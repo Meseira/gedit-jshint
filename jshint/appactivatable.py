@@ -15,5 +15,18 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from .appactivatable import AppActivatable
-from .windowactivatable import WindowActivatable
+from gi.repository import GObject, Gedit
+
+class AppActivatable(GObject.Object, Gedit.AppActivatable):
+    __gtype_name__ = "JSHintAppActivatable"
+
+    app = GObject.property(type=Gedit.App)
+
+    def __init__(self):
+        GObject.Object.__init__(self)
+
+    def do_activate(self):
+        pass
+
+    def do_deactivate(self):
+        pass
