@@ -37,4 +37,10 @@ class WindowActivatable(GObject.Object, Gedit.WindowActivatable):
         self._action = None
 
     def do_update_state(self):
-        pass
+        doc = self.window.get_active_document()
+        state = False
+        if doc:
+            lang = doc.get_language()
+            if lang and lang.get_id() == "js":
+                state = True
+        self._action.set_enabled(state)
