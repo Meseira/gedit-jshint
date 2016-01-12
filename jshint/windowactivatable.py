@@ -15,7 +15,7 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from gi.repository import GObject, Gedit
+from gi.repository import GObject, Gedit, Gio
 
 class WindowActivatable(GObject.Object, Gedit.WindowActivatable):
     __gtype_name__ = "JSHintWindowActivatable"
@@ -24,12 +24,17 @@ class WindowActivatable(GObject.Object, Gedit.WindowActivatable):
 
     def __init__(self):
         GObject.Object.__init__(self)
+        self._action = None
 
     def do_activate(self):
-        pass
+        self._action = Gio.SimpleAction(name="check-with-jshint")
+        self._action.connect("activate",
+                lambda action, data: print("Test JSHint Plugin"))
+        self.window.add_action(self._action)
 
     def do_deactivate(self):
-        pass
+        self.window.remove_action("check-with-jshint")
+        self._action = None
 
     def do_update_state(self):
         pass
