@@ -29,8 +29,7 @@ class WindowActivatable(GObject.Object, Gedit.WindowActivatable):
     def do_activate(self):
         # Action for checking code
         self._action = Gio.SimpleAction(name="check-with-jshint")
-        self._action.connect("activate",
-                lambda action, data: print("Test JSHint Plugin"))
+        self._action.connect("activate", self._run_jshint)
         self.window.add_action(self._action)
 
     def do_deactivate(self):
@@ -46,3 +45,6 @@ class WindowActivatable(GObject.Object, Gedit.WindowActivatable):
             if lang and lang.get_id() == "js":
                 state = True
         self._action.set_enabled(state)
+
+    def _run_jshint(self, action, data=None):
+        print("Test JSHint Plugin")
