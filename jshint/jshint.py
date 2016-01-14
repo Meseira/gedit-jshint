@@ -17,8 +17,10 @@
 
 class JSHint(object):
 
+    script_path = "js/jshint-2.9.1-rc3.js"
+
     def __init__(self):
         pass
 
     def run(self):
-        print("Test JSHint Plugin")
+        print("Test JSHint Plugin : " + self.script_path)
