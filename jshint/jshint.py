@@ -15,12 +15,24 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import subprocess as sp
+
 class JSHint(object):
 
     script_path = "js/jshint-2.9.1-rc3.js"
 
     def __init__(self):
-        pass
+        # FIXME only for Debian based distribution (/usr/bin/node for others)
+        self._nodejs_bin = "/usr/bin/nodejs"
 
     def run(self):
         print("Test JSHint Plugin : " + self.script_path)
+        try:
+            test_str = sp.check_output(
+                [self._nodejs_bin, "-e", "console.log(42)"],
+                universal_newlines=True)
+            print("Test : " + test_str)
+        except sp.CalledProcessError as e:
+            print("CalledProcessError (" + e.returncode + ")")
+        except OSError as e:
+            print("OSError : " + e.strerror)
