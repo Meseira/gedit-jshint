@@ -27,6 +27,7 @@ class JSHint(object):
         self._nodejs_bin = "/usr/bin/nodejs"
 
         self._path_js = os.path.join(os.path.dirname(__file__), "js")
+        self._path_jshint = os.path.join(self._path_js, "jshint.js")
         self._path_run = os.path.join(self._path_js, "run.js")
 
     def run(self, doc):
@@ -37,13 +38,19 @@ class JSHint(object):
         output = ""
         with tf.NamedTemporaryFile() as f:
             f.write(text)
-            cmd = ' '.join([self._nodejs_bin, self._path_run, f.name])
+            f.flush()
+
+            cmd = ' '.join([
+                self._nodejs_bin,
+                self._path_run,
+                self._path_jshint,
+                f.name])
             cmd_array = shlex.split(cmd)
 
             try:
                 output = sp.check_output(cmd_array, universal_newlines=True)
             except sp.CalledProcessError as e:
-                output = "CalledProcessError (" + e.returncode + ")"
+                output = "CalledProcessError ({})".format(e.returncode)
             except OSError as e:
                 output = "OSError : " + e.strerror
 
