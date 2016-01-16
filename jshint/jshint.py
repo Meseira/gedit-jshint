@@ -31,11 +31,13 @@ class JSHint(object):
         self._path_run = os.path.join(self._path_js, "run.js")
 
     def run(self, doc):
+        if not self._nodejs_bin:
+            return '{"error":1,"data":"cannot find Node.js binary"}'
+
         start = doc.get_start_iter()
         end = doc.get_end_iter()
         text = doc.get_text(start, end, True).encode()
 
-        output = ""
         with tf.NamedTemporaryFile() as f:
             f.write(text)
             f.flush()
@@ -50,8 +52,8 @@ class JSHint(object):
             try:
                 output = sp.check_output(cmd_array, universal_newlines=True)
             except sp.CalledProcessError as e:
-                output = "CalledProcessError ({})".format(e.returncode)
+                output = '{"error":1,"data":"Code ' + str(e.returncode) + '"}'
             except OSError as e:
-                output = "OSError : " + e.strerror
+                output = '{"error":1,"data":"' + e.strerror.replace('"', '\'') + '"}'
 
         return output.strip()
