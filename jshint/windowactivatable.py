@@ -52,4 +52,7 @@ class WindowActivatable(GObject.Object, Gedit.WindowActivatable):
         self._action.set_enabled(state)
 
     def _run_jshint(self, action, data=None):
-        self._jshint.run()
+        doc = self.window.get_active_document()
+        if doc:
+            result = self._jshint.run(self.window.get_active_document())
+            print(result)

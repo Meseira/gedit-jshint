@@ -15,24 +15,36 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import os
+import shlex
 import subprocess as sp
+import tempfile as tf
 
 class JSHint(object):
-
-    script_path = "js/jshint-2.9.1-rc3.js"
 
     def __init__(self):
         # FIXME only for Debian based distribution (/usr/bin/node for others)
         self._nodejs_bin = "/usr/bin/nodejs"
 
-    def run(self):
-        print("Test JSHint Plugin : " + self.script_path)
-        try:
-            test_str = sp.check_output(
-                [self._nodejs_bin, "-e", "console.log(42)"],
-                universal_newlines=True)
-            print("Test : " + test_str)
-        except sp.CalledProcessError as e:
-            print("CalledProcessError (" + e.returncode + ")")
-        except OSError as e:
-            print("OSError : " + e.strerror)
+        self._path_js = os.path.join(os.path.dirname(__file__), "js")
+        self._path_run = os.path.join(self._path_js, "run.js")
+
+    def run(self, doc):
+        start = doc.get_start_iter()
+        end = doc.get_end_iter()
+        text = doc.get_text(start, end, True).encode()
+
+        output = ""
+        with tf.NamedTemporaryFile() as f:
+            f.write(text)
+            cmd = ' '.join([self._nodejs_bin, self._path_run, f.name])
+            cmd_array = shlex.split(cmd)
+
+            try:
+                output = sp.check_output(cmd_array, universal_newlines=True)
+            except sp.CalledProcessError as e:
+                output = "CalledProcessError (" + e.returncode + ")"
+            except OSError as e:
+                output = "OSError : " + e.strerror
+
+        return output.strip()
