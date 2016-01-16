@@ -9,8 +9,14 @@
 
   var JSHINT = require(jshint_script).JSHINT;
   JSHINT(array);
+
   JSHINT.errors.forEach(function (element, index, array) {
-    console.log(element)
+    console.log(
+        '{' +
+        '"line":' + element.line + ',' +
+        '"character":' + element.character + ',' +
+        '"reason":"' + encodeURI(element.reason) +
+        '}');
   });
 
   process.exit(0);
