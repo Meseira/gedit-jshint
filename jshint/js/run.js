@@ -1,4 +1,5 @@
 (function (jshint_script, target_file) {
+  "use strict";
 
   if (!jshint_script || !target_file) {
     process.exit(1);
