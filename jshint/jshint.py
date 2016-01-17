@@ -15,7 +15,7 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import os
+import os.path
 import shlex
 import subprocess as sp
 import tempfile as tf
@@ -23,12 +23,29 @@ import tempfile as tf
 class JSHint(object):
 
     def __init__(self):
-        # FIXME only for Debian based distribution (/usr/bin/node for others)
-        self._nodejs_bin = "/usr/bin/nodejs"
-
+        # Path to JavaScript sources
         self._path_js = os.path.join(os.path.dirname(__file__), "js")
         self._path_jshint = os.path.join(self._path_js, "jshint.js")
         self._path_run = os.path.join(self._path_js, "run.js")
+
+        # Locate the Node.js binary
+        self._nodejs_bin = None
+
+        try:
+            output = sp.check_output(
+                    ["whereis", "-b", "nodejs", "node"],
+                    universal_newlines=True).strip().split('\n')
+        except sp.CalledProcessError:
+            return
+        except OSError:
+            return
+
+        if len(output[0].split()) > 1:
+            # Found a binary for 'nodejs'
+            self._nodejs_bin = output[0].split()[1]
+        elif len(output[1].split()) > 1:
+            # Found a binary for 'node'
+            self._nodejs_bin = output[1].split()[1]
 
     def run(self, doc):
         if not self._nodejs_bin:
