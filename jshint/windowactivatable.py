@@ -41,6 +41,9 @@ class WindowActivatable(GObject.Object, Gedit.WindowActivatable):
 
         # Output panel
         self._panel = OutputPanel()
+        bottom_panel = self.window.get_bottom_panel()
+        bottom_panel.add_titled(self._panel, "JSHintOutputPanel", "JSHint")
+        self._panel.show() # TODO Hide/show on condition
 
     def do_deactivate(self):
         self._panel = None
