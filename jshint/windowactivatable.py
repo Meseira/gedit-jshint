@@ -17,6 +17,7 @@
 
 from gi.repository import GObject, Gedit, Gio
 from .jshint import JSHint
+from .outputpanel import OutputPanel
 
 class WindowActivatable(GObject.Object, Gedit.WindowActivatable):
     __gtype_name__ = "JSHintWindowActivatable"
@@ -27,6 +28,7 @@ class WindowActivatable(GObject.Object, Gedit.WindowActivatable):
         GObject.Object.__init__(self)
         self._action = None
         self._jshint = None
+        self._panel = None
 
     def do_activate(self):
         # Action for checking code
@@ -37,7 +39,14 @@ class WindowActivatable(GObject.Object, Gedit.WindowActivatable):
         # JSHint interface
         self._jshint = JSHint()
 
+        # Output panel
+        self._panel = OutputPanel()
+
     def do_deactivate(self):
+        self._panel = None
+        self._jshint = None
+
+        # Remove action
         self.window.remove_action("check-with-jshint")
         self._action = None
 
