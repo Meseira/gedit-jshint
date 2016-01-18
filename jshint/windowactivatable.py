@@ -43,7 +43,6 @@ class WindowActivatable(GObject.Object, Gedit.WindowActivatable):
         self._panel = OutputPanel()
         bottom_panel = self.window.get_bottom_panel()
         bottom_panel.add_titled(self._panel, "JSHintOutputPanel", "JSHint")
-        self._panel.show() # TODO Hide/show on condition
 
     def do_deactivate(self):
         self._panel = None
@@ -56,12 +55,18 @@ class WindowActivatable(GObject.Object, Gedit.WindowActivatable):
     def do_update_state(self):
         doc = self.window.get_active_document()
         state = False
+
         if doc:
             lang = doc.get_language()
             # Only for JavaScript
             if lang and lang.get_id() == "js":
                 state = True
+
         self._action.set_enabled(state)
+        if state:
+            self._panel.show()
+        else:
+            self._panel.hide()
 
     def _run_jshint(self, action, data=None):
         doc = self.window.get_active_document()
