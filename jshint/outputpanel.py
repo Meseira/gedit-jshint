@@ -17,7 +17,26 @@
 
 from gi.repository import Gtk
 
+import json
+
 class OutputPanel(Gtk.Box):
 
     def __init__(self):
         Gtk.Box.__init__(self)
+
+        self._text_view = Gtk.TextView()
+        self._text_view.show()
+        self.pack_start(self._text_view, True, True, 0)
+
+    def push(self, json_string):
+        try:
+            item = json.loads(json_string)
+        except ValueError:
+            # TODO log some message on error
+            return
+
+        line = ""
+        for i in item:
+            line += " " + str(item[i]) + " "
+        line += '\n'
+        self._text_view.get_buffer().insert_at_cursor(line)

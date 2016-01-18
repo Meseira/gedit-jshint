@@ -72,4 +72,5 @@ class WindowActivatable(GObject.Object, Gedit.WindowActivatable):
         doc = self.window.get_active_document()
         if doc:
             result = self._jshint.run(self.window.get_active_document())
-            print(result)
+            for item in result.split('\n'):
+                self._panel.push(item)
