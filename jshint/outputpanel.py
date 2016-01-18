@@ -32,8 +32,7 @@ class OutputPanel(Gtk.Box):
         try:
             item = json.loads(json_string)
         except ValueError:
-            # TODO log some message on error
-            return
+            item = '{"error":1,"data":"invalid JSON"}'
 
         line = ""
         for i in item:
