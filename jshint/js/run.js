@@ -32,7 +32,7 @@
         '{' +
         '"line":' + element.line + ',' +
         '"character":' + element.character + ',' +
-        '"reason":"' + encodeURI(element.reason) +
+        '"reason":"' + encodeURI(element.reason) + '"' +
         '}');
   });
 
