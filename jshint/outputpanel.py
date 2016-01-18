@@ -18,6 +18,7 @@
 from gi.repository import Gtk
 
 import json
+import urllib.request
 
 class OutputPanel(Gtk.Box):
 
@@ -34,8 +35,10 @@ class OutputPanel(Gtk.Box):
         except ValueError:
             item = json.loads('{"error":1,"data":"invalid JSON"}')
 
-        line = ""
-        for i in item:
-            line += " " + str(item[i]) + " "
-        line += '\n'
+        if "error" in item.keys():
+            line = "ERROR: " + item["data"] + "\n"
+        else:
+            line = (str(item["line"]) + " (" + str(item["character"]) + ") " +
+                    urllib.request.unquote(item["reason"]) + "\n")
+
         self._text_view.get_buffer().insert_at_cursor(line)
