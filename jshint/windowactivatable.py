@@ -69,9 +69,10 @@ class WindowActivatable(GObject.Object, Gedit.WindowActivatable):
             self._panel.hide()
 
     def _run_jshint(self, action, data=None):
-        self._panel.clear()
         doc = self.window.get_active_document()
         if doc:
             result = self._jshint.run(self.window.get_active_document())
+
+            self._panel.clear()
             for item in result.split('\n'):
                 self._panel.append(item)

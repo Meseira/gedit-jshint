@@ -20,7 +20,7 @@ from gi.repository import Gtk
 import json
 import urllib.request
 
-class OutputPanel(Gtk.Box):
+class OutputPanel(Gtk.ScrolledWindow):
 
     def __init__(self):
         Gtk.Box.__init__(self)
@@ -30,7 +30,8 @@ class OutputPanel(Gtk.Box):
             renderer = Gtk.CellRendererText()
             column = Gtk.TreeViewColumn(title, renderer, text=i)
             self._view.append_column(column)
-        self.pack_start(self._view, True, True, 0)
+        #self.pack_start(self._view, True, True, 0)
+        self.add(self._view)
 
         self.show_all()
 
