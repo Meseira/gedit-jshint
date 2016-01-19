@@ -71,7 +71,14 @@ class WindowActivatable(GObject.Object, Gedit.WindowActivatable):
     def _run_jshint(self, action, data=None):
         doc = self.window.get_active_document()
         if doc:
+            bottom_panel = self.window.get_bottom_panel()
             result = self._jshint.run(self.window.get_active_document())
+
+            # Show JSHint panel if not visible
+            if not bottom_panel.is_visible():
+                bottom_panel.set_visible(True)
+            if bottom_panel.get_visible_child() != self._panel:
+                bottom_panel.set_visible_child(self._panel)
 
             self._panel.clear()
             for item in result.split('\n'):
