@@ -49,7 +49,7 @@ class JSHint(object):
 
     def run(self, doc):
         if not self._nodejs_bin:
-            return '{"error":1,"data":"cannot find Node.js binary"}'
+            return '{"error":1,"data":"Cannot find Node.js binary"}'
 
         start = doc.get_start_iter()
         end = doc.get_end_iter()

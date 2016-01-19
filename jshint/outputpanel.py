@@ -38,7 +38,7 @@ class OutputPanel(Gtk.Box):
         try:
             item = json.loads(json_string)
         except ValueError:
-            item = json.loads('{"error":1,"data":"invalid JSON"}')
+            item = json.loads('{"error":1,"data":"Invalid JSON"}')
 
         if "error" in item.keys():
             self._view.get_model().append([0, 0, item["data"]])
