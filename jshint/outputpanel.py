@@ -26,11 +26,10 @@ class OutputPanel(Gtk.ScrolledWindow):
         Gtk.Box.__init__(self)
 
         self._view = Gtk.TreeView(Gtk.ListStore(int, int, str))
+        renderer = Gtk.CellRendererText()
         for i, title in enumerate(["Line", "Character", "Message"]):
-            renderer = Gtk.CellRendererText()
             column = Gtk.TreeViewColumn(title, renderer, text=i)
             self._view.append_column(column)
-        #self.pack_start(self._view, True, True, 0)
         self.add(self._view)
 
         self.show_all()
