@@ -25,20 +25,28 @@ class OutputPanel(Gtk.Box):
     def __init__(self):
         Gtk.Box.__init__(self)
 
-        self._text_view = Gtk.TextView()
-        self._text_view.show()
-        self.pack_start(self._text_view, True, True, 0)
+        self._view = Gtk.TreeView(Gtk.ListStore(int, int, str))
+        for i, title in enumerate(["Line", "Character", "Message"]):
+            renderer = Gtk.CellRendererText()
+            column = Gtk.TreeViewColumn(title, renderer, text=i)
+            self._view.append_column(column)
+        self.pack_start(self._view, True, True, 0)
 
-    def push(self, json_string):
+        self.show_all()
+
+    def append(self, json_string):
         try:
             item = json.loads(json_string)
         except ValueError:
             item = json.loads('{"error":1,"data":"invalid JSON"}')
 
         if "error" in item.keys():
-            line = "ERROR: " + item["data"] + "\n"
+            self._view.get_model().append([0, 0, item["data"]])
         else:
-            line = (str(item["line"]) + " (" + str(item["character"]) + ") " +
-                    urllib.request.unquote(item["reason"]) + "\n")
+            self._view.get_model().append([
+                item["line"], item["character"],
+                urllib.request.unquote(item["reason"])])
 
-        self._text_view.get_buffer().insert_at_cursor(line)
+    def clear(self):
+        self._view.get_model().clear()
+
