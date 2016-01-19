@@ -25,10 +25,10 @@ class OutputPanel(Gtk.ScrolledWindow):
     def __init__(self):
         Gtk.Box.__init__(self)
 
-        self._view = Gtk.TreeView(Gtk.ListStore(int, int, str))
+        self._view = Gtk.TreeView(Gtk.ListStore(int, int, str, str))
         renderer = Gtk.CellRendererText()
         for i, title in enumerate(["Line", "Character", "Message"]):
-            column = Gtk.TreeViewColumn(title, renderer, text=i)
+            column = Gtk.TreeViewColumn(title, renderer, text=i, background=3)
             self._view.append_column(column)
         self.add(self._view)
 
@@ -41,11 +41,12 @@ class OutputPanel(Gtk.ScrolledWindow):
             item = json.loads('{"error":1,"data":"Invalid JSON"}')
 
         if "error" in item.keys():
-            self._view.get_model().append([0, 0, item["data"]])
+            self._view.get_model().append([0, 0, item["data"], "red"])
         else:
             self._view.get_model().append([
                 item["line"], item["character"],
-                urllib.request.unquote(item["reason"])])
+                urllib.request.unquote(item["reason"]),
+                "white"])
 
     def clear(self):
         self._view.get_model().clear()
