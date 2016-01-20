@@ -15,39 +15,48 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from gi.repository import Gtk
-
 import json
 import urllib.request
 
+from gi.repository import Gtk
+
+__all__ = ("OutputPanel", )
+
 class OutputPanel(Gtk.ScrolledWindow):
+    """Panel to display the results of a JSHint run."""
 
     def __init__(self):
         Gtk.Box.__init__(self)
 
-        self._view = Gtk.TreeView(Gtk.ListStore(int, int, str, str))
+        self._tree_view = Gtk.TreeView(Gtk.ListStore(int, int, str, str))
         renderer = Gtk.CellRendererText()
         for i, title in enumerate(["Line", "Character", "Message"]):
             column = Gtk.TreeViewColumn(title, renderer, text=i, background=3)
-            self._view.append_column(column)
-        self.add(self._view)
+            self._tree_view.append_column(column)
+        self.add(self._tree_view)
 
         self.show_all()
 
     def append(self, json_string):
+        """Append a new line from a JSHint error in JSON format."""
+
         try:
             item = json.loads(json_string)
         except ValueError:
             item = json.loads('{"error":1,"data":"Invalid JSON"}')
 
         if "error" in item.keys():
-            self._view.get_model().append([0, 0, item["data"], "red"])
+            # Something went wrong
+            self._tree_view.get_model().append([0, 0, item["data"], "red"])
         else:
-            self._view.get_model().append([
-                item["line"], item["character"],
+            self._tree_view.get_model().append([
+                item["line"],
+                item["character"],
                 urllib.request.unquote(item["reason"]),
                 "white"])
 
     def clear(self):
-        self._view.get_model().clear()
+        """Remove all rows."""
+
+        self._tree_view.get_model().clear()
 

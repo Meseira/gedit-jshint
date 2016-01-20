@@ -27,12 +27,10 @@ class AppActivatable(GObject.Object, Gedit.AppActivatable):
         self._menu_ext = None
 
     def do_activate(self):
-        # Menu item for action
         self._menu_ext = self.extend_menu("tools-section")
         item = Gio.MenuItem.new("Check with JSHint", "win.check-with-jshint")
         self._menu_ext.append_menu_item(item)
 
-        # Accelerator for action
         self.app.set_accels_for_action("win.check-with-jshint", ["<Ctrl>J"])
 
     def do_deactivate(self):

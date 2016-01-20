@@ -16,6 +16,7 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from gi.repository import GObject, Gedit, Gio
+
 from .jshint import JSHint
 from .outputpanel import OutputPanel
 
@@ -31,24 +32,20 @@ class WindowActivatable(GObject.Object, Gedit.WindowActivatable):
         self._panel = None
 
     def do_activate(self):
-        # Action for checking code
         self._action = Gio.SimpleAction(name="check-with-jshint")
         self._action.connect("activate", self._run_jshint)
         self.window.add_action(self._action)
 
-        # JSHint interface
-        self._jshint = JSHint()
-
-        # Output panel
         self._panel = OutputPanel()
         bottom_panel = self.window.get_bottom_panel()
         bottom_panel.add_titled(self._panel, "JSHintOutputPanel", "JSHint")
 
-    def do_deactivate(self):
-        self._panel = None
-        self._jshint = None
+        self._jshint = JSHint()
 
-        # Remove action
+    def do_deactivate(self):
+        self._jshint = None
+        self._panel = None
+
         self.window.remove_action("check-with-jshint")
         self._action = None
 
