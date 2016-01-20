@@ -8,7 +8,7 @@ This software is a plugin for the text editor [Gedit][1]. It allows to check Jav
 Requirements
 ------------
 
-This plugins is for Gedit 3 and is **not compatible with Gedit 2**.
+This plugin is for Gedit 3 and is **not compatible with Gedit 2**.
 
 The JavaScript runtime environment [Node.js][4] is needed to run the JSHint script. In a Debian-like operating system, simply install the package `nodejs`:
 ```
@@ -19,11 +19,10 @@ Installation
 ------------
 
 1. Download this repository by clicking the `Download ZIP` button at the top of the [GitHub page][5] or clone it with the following command:
-```
-git clone https://github.com/Meseira/gedit-jshint.git
-```
 
-2. Copy the file `jshint.plugin` and the folder `jshint` in the folder `~/.local/share/gedit/plugins/` (you will need to create this folder if it does not already exist).
+    git clone https://github.com/Meseira/gedit-jshint.git
+
+2. Copy the file `jshint.plugin` and the folder `jshint` to `~/.local/share/gedit/plugins/` (you will need to create this folder if it does not already exist).
 
 3. Restart Gedit.
 
