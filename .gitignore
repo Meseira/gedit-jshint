@@ -1,0 +1,5 @@
+# Python compilation
+/**/__pycache__/
+
+# Vim swap files
+.*.swp
