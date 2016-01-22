@@ -41,7 +41,7 @@ For now, the plugin only checks JavaScript source code with the JSHint default p
 License
 -------
 
-This plugin is a free software and is published under the [GNU General Public License][6] except one file, the JSHint script, that is published under the [MIT Expat License][7].
+This plugin is a free software and is published under the [GNU General Public License][6] except one file, the JSHint script, that is published under the [MIT Expat License][7]. See the file `LICENSE` for more information.
 
 Compatibility
 -------------
