@@ -43,8 +43,8 @@ License
 
 The JSHint plugin for Gedit is a free software and is distributed under the terms of the [GNU General Public License][6] as published by the [Free Software Foundation][7]; either version 3 of the License, or (at your option) any later version. A copy of this license can be found in the file `LICENSE` included with the source code of this plugin.
 
-The included JSHint script (found in the subdirectory `jshint/js/`) has its own license, namely the [MIT Expat License][8], which can be found in the file `jshint/js/LICENSE` included with the source code of this plugin.
-Website: [https://github.com/jshint/jshint/blob/master/dist/jshint.js][9]
+The included JSHint script (found in the subdirectory `jshint/js/`) has its own license, namely the [MIT Expat License][8], which can be found in the file `jshint/js/LICENSE` included with the source code of this plugin.  
+Website: https://github.com/jshint/jshint/blob/master/dist/jshint.js
 
 Compatibility
 -------------
@@ -54,7 +54,7 @@ The JSHint plugin has been tested with Debian Jessie and Gedit 3.14. It should w
 Issues
 ------
 
-If you encounter any problem with this software, do not hesitate to report it in a [GitHub issue][10].
+If you encounter any problem with this software, do not hesitate to report it in a [GitHub issue][9].
 
   [1]: https://wiki.gnome.org/Apps/Gedit
   [2]: https://github.com/jshint/jshint
@@ -64,5 +64,4 @@ If you encounter any problem with this software, do not hesitate to report it in
   [6]: https://gnu.org/licenses/gpl.html
   [7]: https://www.fsf.org/
   [8]: https://www.gnu.org/licenses/license-list.html#Expat
-  [9]: https://github.com/jshint/jshint/blob/master/dist/jshint.js
-  [10]: https://github.com/Meseira/gedit-jshint/issues
+  [9]: https://github.com/Meseira/gedit-jshint/issues
