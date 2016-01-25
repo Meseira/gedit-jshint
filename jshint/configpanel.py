@@ -27,8 +27,9 @@ class ConfigPanel(object):
 
         grid = Gtk.Grid()
         for i in range(30):
-            grid.attach(Gtk.CheckButton("Button {}".format(i)),
-                    i // 10, i % 10, 1, 1)
+            button = Gtk.CheckButton("Button {}".format(i))
+            button.set_tooltip_text("This is the button {}".format(i))
+            grid.attach(button, i // 10, i % 10, 1, 1)
         self._widget.append_page(grid, Gtk.Label("Enforcing"))
 
         page = Gtk.Box()
