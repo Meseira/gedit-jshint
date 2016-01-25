@@ -25,12 +25,11 @@ class ConfigPanel(object):
     def __init__(self):
         self._widget = Gtk.Notebook()
 
-        page = Gtk.Box()
-        page.add(Gtk.Label("Enforcing options"))
-        self._widget.append_page(page, Gtk.Label("Enforcing"))
-
         grid = Gtk.Grid()
-        grid.add(Gtk.CheckButton("Button 1"))
+        for i in range(30):
+            grid.attach(Gtk.CheckButton("Button {}".format(i)),
+                    i // 10, i % 10, 1, 1)
+        self._widget.append_page(grid, Gtk.Label("Enforcing"))
 
         page = Gtk.Box()
         page.add(Gtk.Label("Relaxing options"))
