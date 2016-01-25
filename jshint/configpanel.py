@@ -23,7 +23,22 @@ class ConfigPanel(object):
     """Panel to configure the JSHint plugin."""
 
     def __init__(self):
-        self._widget = Gtk.Label("Configuration panel")
+        self._widget = Gtk.Notebook()
+
+        page = Gtk.Box()
+        page.add(Gtk.Label("Enforcing options"))
+        self._widget.append_page(page, Gtk.Label("Enforcing"))
+
+        grid = Gtk.Grid()
+        grid.add(Gtk.CheckButton("Button 1"))
+
+        page = Gtk.Box()
+        page.add(Gtk.Label("Relaxing options"))
+        self._widget.append_page(page, Gtk.Label("Relaxing"))
+
+        page = Gtk.Box()
+        page.add(Gtk.Label("Environments options"))
+        self._widget.append_page(page, Gtk.Label("Environments"))
 
     @property
     def widget(self):
