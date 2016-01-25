@@ -15,12 +15,14 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from gi.repository import GObject, Gedit, Gio
+from gi.repository import GObject, Gedit, Gio, PeasGtk
 
+from .configpanel import ConfigPanel
 from .jshint import JSHint
 from .outputpanel import OutputPanel
 
-class WindowActivatable(GObject.Object, Gedit.WindowActivatable):
+class WindowActivatable(GObject.Object, Gedit.WindowActivatable,
+        PeasGtk.Configurable):
     __gtype_name__ = "JSHintWindowActivatable"
 
     window = GObject.property(type=Gedit.Window)
@@ -28,23 +30,31 @@ class WindowActivatable(GObject.Object, Gedit.WindowActivatable):
     def __init__(self):
         GObject.Object.__init__(self)
         self._action = None
+        self._config_panel = None
         self._jshint = None
-        self._panel = None
+        self._output_panel = None
 
     def do_activate(self):
         self._action = Gio.SimpleAction(name="check-with-jshint")
         self._action.connect("activate", self._run_jshint)
         self.window.add_action(self._action)
 
-        self._panel = OutputPanel()
+        self._output_panel = OutputPanel()
         bottom_panel = self.window.get_bottom_panel()
-        bottom_panel.add_titled(self._panel, "JSHintOutputPanel", "JSHint")
+        bottom_panel.add_titled(self._output_panel,
+                "JSHintOutputPanel", "JSHint")
 
         self._jshint = JSHint()
 
+    def do_create_configure_widget(self):
+        if not self._config_panel:
+            self._config_panel = ConfigPanel()
+
+        return self._config_panel.widget
+
     def do_deactivate(self):
         self._jshint = None
-        self._panel = None
+        self._output_panel = None
 
         self.window.remove_action("check-with-jshint")
         self._action = None
@@ -61,9 +71,9 @@ class WindowActivatable(GObject.Object, Gedit.WindowActivatable):
 
         self._action.set_enabled(state)
         if state:
-            self._panel.show()
+            self._output_panel.show()
         else:
-            self._panel.hide()
+            self._output_panel.hide()
 
     def _run_jshint(self, action, data=None):
         doc = self.window.get_active_document()
@@ -74,9 +84,9 @@ class WindowActivatable(GObject.Object, Gedit.WindowActivatable):
             # Show JSHint panel if not visible
             if not bottom_panel.is_visible():
                 bottom_panel.set_visible(True)
-            if bottom_panel.get_visible_child() != self._panel:
-                bottom_panel.set_visible_child(self._panel)
+            if bottom_panel.get_visible_child() != self._output_panel:
+                bottom_panel.set_visible_child(self._output_panel)
 
-            self._panel.clear()
+            self._output_panel.clear()
             for item in result.split('\n'):
-                self._panel.append(item)
+                self._output_panel.append(item)
