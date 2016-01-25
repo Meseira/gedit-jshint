@@ -26,7 +26,7 @@ class OutputPanel(Gtk.ScrolledWindow):
     """Panel to display the results of a JSHint run."""
 
     def __init__(self):
-        Gtk.Box.__init__(self)
+        Gtk.ScrolledWindow.__init__(self)
 
         self._tree_view = Gtk.TreeView(Gtk.ListStore(int, int, str, str))
         renderer = Gtk.CellRendererText()
