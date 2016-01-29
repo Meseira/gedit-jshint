@@ -57,6 +57,4 @@ class OutputPanel(Gtk.ScrolledWindow):
 
     def clear(self):
         """Remove all rows."""
-
         self._tree_view.get_model().clear()
-
