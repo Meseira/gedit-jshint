@@ -16,6 +16,7 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import json
+import sys
 import urllib.request
 
 from gi.repository import Gtk
@@ -28,11 +29,10 @@ class OutputPanel(Gtk.ScrolledWindow):
     def __init__(self):
         Gtk.ScrolledWindow.__init__(self)
 
-        self._tree_view = Gtk.TreeView(Gtk.ListStore(int, int, str, str))
+        self._tree_view = Gtk.TreeView(Gtk.ListStore(str, str))
         renderer = Gtk.CellRendererText()
-        for i, title in enumerate(["Line", "Character", "Message"]):
-            column = Gtk.TreeViewColumn(title, renderer, text=i, background=3)
-            self._tree_view.append_column(column)
+        column = Gtk.TreeViewColumn("Message", renderer, text=0, background=1)
+        self._tree_view.append_column(column)
         self.add(self._tree_view)
 
         self.show_all()
@@ -57,4 +57,44 @@ class OutputPanel(Gtk.ScrolledWindow):
 
     def clear(self):
         """Remove all rows."""
+
         self._tree_view.get_model().clear()
+
+    def update(self, report_json):
+        """Update the panel with informations from the JSHint report
+        given as a JSON string.
+        """
+
+        self.clear()
+
+        report = {}
+        try:
+            report = json.loads(report_json)
+        except ValueError:
+            print("JSHint Plugin: error parsing JSON", file=sys.stderr)
+
+        if report:
+            if "unused" in report.keys():
+                for item in report["unused"]:
+                    message = ''.join([
+                        str(item["line"]), ":", str(item["character"]), " ",
+                        "Unused variable '", item["name"], "'"])
+                    self._tree_view.get_model().append([message, "white"])
+
+            if "errors" in report.keys():
+                for item in report["errors"]:
+                    message = ''.join([
+                        str(item["line"]), ":", str(item["character"]), " ",
+                        urllib.request.unquote(item["reason"])])
+                    self._tree_view.get_model().append([message, "white"])
+
+            if not ("unused" in report.keys() or "errors" in report.keys()):
+                # No error, perfect code!
+                self._tree_view.get_model().append([
+                    "No error, congrats!",
+                    "green"])
+        else:
+            # Something went wrong
+            self._tree_view.get_model().append([
+                "An error occurred, see the logs",
+                "red"])
