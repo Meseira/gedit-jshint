@@ -29,6 +29,7 @@ class WindowActivatable(GObject.Object, Gedit.WindowActivatable,
 
     def __init__(self):
         GObject.Object.__init__(self)
+
         self._action = None
         self._config_panel = None
         self._jshint = None
@@ -39,7 +40,7 @@ class WindowActivatable(GObject.Object, Gedit.WindowActivatable,
         self._action.connect("activate", self._run_jshint)
         self.window.add_action(self._action)
 
-        self._output_panel = OutputPanel()
+        self._output_panel = OutputPanel(self.window)
         bottom_panel = self.window.get_bottom_panel()
         bottom_panel.add_titled(self._output_panel,
                 "JSHintOutputPanel", "JSHint")

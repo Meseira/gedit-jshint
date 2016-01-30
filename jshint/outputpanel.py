@@ -26,13 +26,18 @@ __all__ = ("OutputPanel", )
 class OutputPanel(Gtk.ScrolledWindow):
     """Panel to display the results of a JSHint run."""
 
-    def __init__(self):
+    def __init__(self, window):
         Gtk.ScrolledWindow.__init__(self)
 
-        self._tree_view = Gtk.TreeView(Gtk.ListStore(str, str))
+        # Parent window
+        self._window = window
+
+        # Tree view
+        self._tree_view = Gtk.TreeView(Gtk.ListStore(int, int, str, str))
         renderer = Gtk.CellRendererText()
-        column = Gtk.TreeViewColumn("Message", renderer, text=0, background=1)
+        column = Gtk.TreeViewColumn("Message", renderer, text=2, background=3)
         self._tree_view.append_column(column)
+        self._tree_view.connect("row-activated", self.on_row_activated)
         self.add(self._tree_view)
 
         self.show_all()
@@ -41,6 +46,18 @@ class OutputPanel(Gtk.ScrolledWindow):
         """Remove all rows."""
 
         self._tree_view.get_model().clear()
+
+    def on_row_activated(self, treeview, path, view_column):
+        """Move cursor to the position given by the current row."""
+
+        line, column = treeview.get_model()[path][:2]
+
+        if line >= 0 and column >= 0:
+            view = self._window.get_active_view()
+            if view:
+                buf = view.get_buffer()
+                buf.place_cursor(buf.get_iter_at_line_offset(line, column))
+                view.grab_focus()
 
     def update(self, report_json):
         """Update the panel with informations from the JSHint report
@@ -58,25 +75,26 @@ class OutputPanel(Gtk.ScrolledWindow):
         if report:
             if "unused" in report.keys():
                 for item in report["unused"]:
-                    message = ''.join([
-                        str(item["line"]), ":", str(item["character"]), " ",
-                        "Unused variable '", item["name"], "'"])
-                    self._tree_view.get_model().append([message, "white"])
+                    message = "{}:{} Unused variable {}".format(
+                            item["line"], item["character"], item["name"])
+                    self._tree_view.get_model().append([
+                        item["line"], item["character"],
+                        message, "white"])
 
             if "errors" in report.keys():
                 for item in report["errors"]:
-                    message = ''.join([
-                        str(item["line"]), ":", str(item["character"]), " ",
-                        urllib.request.unquote(item["reason"])])
-                    self._tree_view.get_model().append([message, "white"])
+                    message = "{}:{} {}".format(
+                        item["line"], item["character"],
+                        urllib.request.unquote(item["reason"]))
+                    self._tree_view.get_model().append([
+                        item["line"], item["character"],
+                        message, "white"])
 
             if not ("unused" in report.keys() or "errors" in report.keys()):
                 # No error, perfect code!
-                self._tree_view.get_model().append([
-                    "No error, congrats!",
-                    "green"])
+                self._tree_view.get_model().append([-1, -1,
+                    "No error, congrats!", "green"])
         else:
             # Something went wrong
-            self._tree_view.get_model().append([
-                "An error occurred, see the logs",
-                "red"])
+            self._tree_view.get_model().append([-1, -1,
+                "An error occurred, see the logs", "red"])
