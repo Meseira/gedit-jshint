@@ -16,6 +16,7 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import json
+import sys
 import urllib.request
 
 from gi.repository import Gtk
@@ -25,38 +26,75 @@ __all__ = ("OutputPanel", )
 class OutputPanel(Gtk.ScrolledWindow):
     """Panel to display the results of a JSHint run."""
 
-    def __init__(self):
-        Gtk.Box.__init__(self)
+    def __init__(self, window):
+        Gtk.ScrolledWindow.__init__(self)
 
+        # Parent window
+        self._window = window
+
+        # Tree view
         self._tree_view = Gtk.TreeView(Gtk.ListStore(int, int, str, str))
         renderer = Gtk.CellRendererText()
-        for i, title in enumerate(["Line", "Character", "Message"]):
-            column = Gtk.TreeViewColumn(title, renderer, text=i, background=3)
-            self._tree_view.append_column(column)
+        column = Gtk.TreeViewColumn("Message", renderer, text=2, background=3)
+        self._tree_view.append_column(column)
+        self._tree_view.connect("row-activated", self.on_row_activated)
         self.add(self._tree_view)
 
         self.show_all()
-
-    def append(self, json_string):
-        """Append a new line from a JSHint error in JSON format."""
-
-        try:
-            item = json.loads(json_string)
-        except ValueError:
-            item = json.loads('{"error":1,"data":"Invalid JSON"}')
-
-        if "error" in item.keys():
-            # Something went wrong
-            self._tree_view.get_model().append([0, 0, item["data"], "red"])
-        else:
-            self._tree_view.get_model().append([
-                item["line"],
-                item["character"],
-                urllib.request.unquote(item["reason"]),
-                "white"])
 
     def clear(self):
         """Remove all rows."""
 
         self._tree_view.get_model().clear()
 
+    def on_row_activated(self, treeview, path, view_column):
+        """Move cursor to the position given by the current row."""
+
+        line, column = treeview.get_model()[path][:2]
+
+        if line >= 0 and column >= 0:
+            view = self._window.get_active_view()
+            if view:
+                buf = view.get_buffer()
+                buf.place_cursor(buf.get_iter_at_line_offset(line, column))
+                view.grab_focus()
+
+    def update(self, report_json):
+        """Update the panel with informations from the JSHint report
+        given as a JSON string.
+        """
+
+        self.clear()
+
+        report = {}
+        try:
+            report = json.loads(report_json)
+        except ValueError:
+            print("JSHint Plugin: error parsing JSON", file=sys.stderr)
+
+        if report:
+            if "unused" in report.keys():
+                for item in report["unused"]:
+                    message = "{}:{} Unused variable {}".format(
+                            item["line"], item["character"], item["name"])
+                    self._tree_view.get_model().append([
+                        item["line"], item["character"],
+                        message, "white"])
+
+            if "errors" in report.keys():
+                for item in report["errors"]:
+                    message = "{}:{} {}".format(
+                        item["line"], item["character"],
+                        urllib.request.unquote(item["reason"]))
+                    self._tree_view.get_model().append([
+                        item["line"], item["character"],
+                        message, "white"])
+
+            if not ("unused" in report.keys() or "errors" in report.keys()):
+                # No error, perfect code!
+                self._tree_view.get_model().append([-1, -1,
+                    "No error, congrats!", "green"])
+        else:
+            # Something went wrong
+            self._tree_view.get_model().append([-1, -1,
+                "An error occurred, see the logs", "red"])

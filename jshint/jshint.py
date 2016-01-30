@@ -18,6 +18,7 @@
 import os.path
 import shlex
 import subprocess
+import sys
 import tempfile
 
 from gi.repository import Gedit
@@ -57,12 +58,13 @@ class JSHint(object):
 
     def run(self, doc):
         """Run the JSHint script on the content of the GeditDocument
-        doc with Node.js. Return a string with one error per line in
-        JSON format.
+        doc with Node.js. Return a JSON string containing the JSHint
+        report or an empty object if an error occurred.
         """
 
         if not self._nodejs_bin:
-            return '{"error":1,"data":"Cannot find Node.js binary"}'
+            print("JSHint Plugin: cannot find Node.js binary", file=sys.stderr)
+            return "{}"
 
         text = doc.get_text(
                 doc.get_start_iter(),
@@ -81,18 +83,15 @@ class JSHint(object):
             cmd_array = shlex.split(cmd)
 
             try:
-                output = subprocess.check_output(
-                        cmd_array,
+                output = subprocess.check_output(cmd_array,
                         universal_newlines=True)
             except subprocess.CalledProcessError as e:
-                output = ' '.join([
-                    '{"error":1,"data":"Code ',
-                    str(e.returncode),
-                    '"}'])
+                print(' '.join(["JSHint Plugin: code", str(e.returncode)]),
+                        file=sys.stderr)
+                return "{}"
             except OSError as e:
-                output = ' '.join([
-                    '{"error":1,"data":"',
-                    e.strerror.replace('"', '\''),
-                    '"}'])
+                print(' '.join(["JSHint Plugin:", e.strerror]),
+                        file=sys.stderr)
+                return "{}"
 
         return output.strip()
