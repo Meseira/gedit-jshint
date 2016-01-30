@@ -37,24 +37,6 @@ class OutputPanel(Gtk.ScrolledWindow):
 
         self.show_all()
 
-    def append(self, json_string):
-        """Append a new line from a JSHint error in JSON format."""
-
-        try:
-            item = json.loads(json_string)
-        except ValueError:
-            item = json.loads('{"error":1,"data":"Invalid JSON"}')
-
-        if "error" in item.keys():
-            # Something went wrong
-            self._tree_view.get_model().append([0, 0, item["data"], "red"])
-        else:
-            self._tree_view.get_model().append([
-                item["line"],
-                item["character"],
-                urllib.request.unquote(item["reason"]),
-                "white"])
-
     def clear(self):
         """Remove all rows."""
 
