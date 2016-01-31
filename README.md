@@ -36,7 +36,7 @@ When a JavaScript source code file is active, you can check it with `Tools > Che
 Notes
 -----
 
-For now, the plugin only checks JavaScript source code with the JSHint default parameters. Allowing to modify the options is in the TODO list and will be available soon, hopefully.
+For now, the plugin only checks JavaScript source code with the JSHint default parameters. Allowing to modify the options is in the TODO list and will be available soon, hopefully. However, [inline configuration][10] can be used to set JSHint options.
 
 License
 -------
@@ -65,3 +65,4 @@ If you encounter any problem with this software, do not hesitate to report it in
   [7]: https://www.fsf.org/
   [8]: https://www.gnu.org/licenses/license-list.html#Expat
   [9]: https://github.com/Meseira/gedit-jshint/issues
+  [10]: http://jshint.com/docs/#inline-configuration
