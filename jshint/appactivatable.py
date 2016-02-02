@@ -15,7 +15,9 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from gi.repository import GObject, Gedit, Gio
+import os
+
+from gi.repository import GLib, GObject, Gedit, Gio
 
 class AppActivatable(GObject.Object, Gedit.AppActivatable):
     __gtype_name__ = "JSHintAppActivatable"
@@ -27,6 +29,13 @@ class AppActivatable(GObject.Object, Gedit.AppActivatable):
         self._menu_ext = None
 
     def do_activate(self):
+        config_dir = os.path.join(GLib.get_user_config_dir(), 'gedit/jshint')
+        os.makedirs(config_dir, exist_ok=True)
+        config_file = os.path.join(config_dir, "options.json")
+        if not os.path.exists(config_file):
+            with open(config_file, "w") as f:
+                print('{"indent": 4, "maxerr": 50}', file=f)
+
         self._menu_ext = self.extend_menu("tools-section")
         item = Gio.MenuItem.new("Check with JSHint", "win.check-with-jshint")
         self._menu_ext.append_menu_item(item)
