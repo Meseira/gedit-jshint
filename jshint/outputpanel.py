@@ -53,11 +53,11 @@ class OutputPanel(Gtk.ScrolledWindow):
 
         line, column = treeview.get_model()[path][:2]
 
-        if line >= 0 and column >= 0:
+        if line > 0 and column > 0:
             view = self._window.get_active_view()
             if view:
                 buf = view.get_buffer()
-                buf.place_cursor(buf.get_iter_at_line_offset(line, column))
+                buf.place_cursor(buf.get_iter_at_line_offset(line-1, column-1))
                 view.grab_focus()
 
     def update(self, report_json):
