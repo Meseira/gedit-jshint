@@ -34,6 +34,7 @@ class OutputPanel(Gtk.ScrolledWindow):
 
         # Tree view
         self._tree_view = Gtk.TreeView(Gtk.ListStore(int, int, str, str))
+        self._tree_view.set_headers_visible(False)
         renderer = Gtk.CellRendererText()
         column = Gtk.TreeViewColumn("Message", renderer, text=2, background=3)
         self._tree_view.append_column(column)
@@ -73,6 +74,9 @@ class OutputPanel(Gtk.ScrolledWindow):
             print("JSHint Plugin: error parsing JSON", file=sys.stderr)
 
         if report:
+            self._tree_view.get_model().append([-1, -1,
+                "Options: {}".format(str(report["options"])[1:-1]), "#CCCCCC"])
+
             if "unused" in report.keys():
                 for item in report["unused"]:
                     message = "{}:{} Unused variable {}".format(
