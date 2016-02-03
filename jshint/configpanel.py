@@ -40,7 +40,10 @@ class ConfigPanel(Gtk.Box):
         grid.set_column_spacing(10)
 
         spin = Gtk.SpinButton()
-        spin.set_adjustment(Gtk.Adjustment(50, 1, 999, 1, 10, 0))
+        spin.set_numeric(True)
+        spin.set_range(1, 999)
+        spin.set_increments(1, 10)
+        spin.set_value(50)
         grid.attach(Gtk.Label("Maximum amount of warnings:", xalign=0),
                 0, 0, 1, 1)
         grid.attach(spin, 1, 0, 1, 1)
