@@ -27,7 +27,7 @@ def check_config_files():
     if not os.path.exists(options_file):
         with open(options_file, "w") as f:
             # Default JSHint options
-            print('{"indent": 4, "maxerr": 50}', file=f)
+            print('{"maxerr": 50}', file=f)
 
 def get_config_dir():
     return os.path.join(GLib.get_user_config_dir(), 'gedit/jshint')
