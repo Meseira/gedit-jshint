@@ -23,19 +23,43 @@ class ConfigPanel(object):
     """Panel to configure the JSHint plugin."""
 
     def __init__(self):
-        #self._widget = Gtk.Notebook()
-        #self._widget = Gtk.Label("Configuration panel for JSHint Plugin")
-        self._widget = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
+        self._widget = Gtk.Box(
+                orientation=Gtk.Orientation.VERTICAL,
+                spacing=10)
 
-        self._widget.pack_start(
-                Gtk.Label("Options selector comes here"),
-                True, True, 0)
+        # Option selector panel
+        selector_panel = Gtk.Frame(label="Options")
+        selector_panel.add(Gtk.Label("Big selector goes here"))
+
+        # Global options panel
+        global_panel = Gtk.Box(
+                orientation=Gtk.Orientation.HORIZONTAL,
+                spacing=10)
+
+        grid = Gtk.Grid()
+        grid.set_column_spacing(10)
+
+        spin = Gtk.SpinButton()
+        spin.set_adjustment(Gtk.Adjustment(50, 1, 999, 1, 10, 0))
+        grid.attach(Gtk.Label("Maximum amount of warnings:", xalign=0),
+                0, 0, 1, 1)
+        grid.attach(spin, 1, 0, 1, 1)
+        grid.attach(Gtk.Label("warnings", xalign=0),
+                2, 0, 1, 1)
+
+        global_panel.pack_start(grid, True, True, 0)
+
+        frame = Gtk.Frame(label="Other global options")
+        global_panel.pack_start(frame, True, True, 0)
+
+        self._widget.pack_start(selector_panel, True, True, 0)
         self._widget.pack_start(
                 Gtk.Separator(orientation=Gtk.Orientation.HORIZONTAL),
                 True, True, 0)
-        self._widget.pack_start(
-                Gtk.Label("Global options come here"),
-                True, True, 0)
+        self._widget.pack_start(global_panel, True, True, 0)
+
+        #self._widget = Gtk.Notebook()
+        #self._widget = Gtk.Label("Configuration panel for JSHint Plugin")
 
         #grid = Gtk.Grid()
         #for i in range(30):
