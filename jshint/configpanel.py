@@ -19,11 +19,11 @@ from gi.repository import Gtk
 
 __all__ = ("ConfigPanel", )
 
-class ConfigPanel(object):
+class ConfigPanel(Gtk.Box):
     """Panel to configure the JSHint plugin."""
 
     def __init__(self):
-        self._widget = Gtk.Box(
+        Gtk.Box.__init__(self,
                 orientation=Gtk.Orientation.VERTICAL,
                 spacing=10)
 
@@ -52,11 +52,10 @@ class ConfigPanel(object):
         frame = Gtk.Frame(label="Other global options")
         global_panel.pack_start(frame, True, True, 0)
 
-        self._widget.pack_start(selector_panel, True, True, 0)
-        self._widget.pack_start(
-                Gtk.Separator(orientation=Gtk.Orientation.HORIZONTAL),
+        self.pack_start(selector_panel, True, True, 0)
+        self.pack_start(Gtk.Separator(orientation=Gtk.Orientation.HORIZONTAL),
                 True, True, 0)
-        self._widget.pack_start(global_panel, True, True, 0)
+        self.pack_start(global_panel, True, True, 0)
 
         #self._widget = Gtk.Notebook()
         #self._widget = Gtk.Label("Configuration panel for JSHint Plugin")
@@ -75,8 +74,3 @@ class ConfigPanel(object):
         #page = Gtk.Box()
         #page.add(Gtk.Label("Environments options"))
         #self._widget.append_page(page, Gtk.Label("Environments"))
-
-    def get_widget(self):
-        """Get the underlying Gtk widget."""
-
-        return self._widget
