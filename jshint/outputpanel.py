@@ -34,6 +34,7 @@ class OutputPanel(Gtk.ScrolledWindow):
 
         # Tree view
         self._tree_view = Gtk.TreeView(Gtk.ListStore(int, int, str, str))
+        self._tree_view.set_headers_visible(False)
         renderer = Gtk.CellRendererText()
         column = Gtk.TreeViewColumn("Message", renderer, text=2, background=3)
         self._tree_view.append_column(column)
@@ -52,11 +53,11 @@ class OutputPanel(Gtk.ScrolledWindow):
 
         line, column = treeview.get_model()[path][:2]
 
-        if line >= 0 and column >= 0:
+        if line > 0 and column > 0:
             view = self._window.get_active_view()
             if view:
                 buf = view.get_buffer()
-                buf.place_cursor(buf.get_iter_at_line_offset(line, column))
+                buf.place_cursor(buf.get_iter_at_line_offset(line-1, column-1))
                 view.grab_focus()
 
     def update(self, report_json):
@@ -73,6 +74,9 @@ class OutputPanel(Gtk.ScrolledWindow):
             print("JSHint Plugin: error parsing JSON", file=sys.stderr)
 
         if report:
+            self._tree_view.get_model().append([-1, -1,
+                "Options: {}".format(str(report["options"])[1:-1]), "#CCCCCC"])
+
             if "unused" in report.keys():
                 for item in report["unused"]:
                     message = "{}:{} Unused variable {}".format(
@@ -83,12 +87,13 @@ class OutputPanel(Gtk.ScrolledWindow):
 
             if "errors" in report.keys():
                 for item in report["errors"]:
-                    message = "{}:{} {}".format(
-                        item["line"], item["character"],
-                        urllib.request.unquote(item["reason"]))
-                    self._tree_view.get_model().append([
-                        item["line"], item["character"],
-                        message, "white"])
+                    if item: # Item can be None due to maxerr
+                        message = "{}:{} {}".format(
+                                item["line"], item["character"],
+                                urllib.request.unquote(item["reason"]))
+                        self._tree_view.get_model().append([
+                            item["line"], item["character"],
+                            message, "white"])
 
             if not ("unused" in report.keys() or "errors" in report.keys()):
                 # No error, perfect code!

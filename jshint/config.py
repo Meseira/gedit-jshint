@@ -15,28 +15,22 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from gi.repository import GObject, Gedit, Gio
+import os
 
-from . import config as Config
+from gi.repository import GLib
 
-class AppActivatable(GObject.Object, Gedit.AppActivatable):
-    __gtype_name__ = "JSHintAppActivatable"
+def check_config_files():
+    config_dir = get_config_dir()
+    os.makedirs(config_dir, exist_ok=True)
 
-    app = GObject.property(type=Gedit.App)
+    options_file = get_options_file()
+    if not os.path.exists(options_file):
+        with open(options_file, "w") as f:
+            # Default JSHint options
+            print('{"indent": 4, "maxerr": 50}', file=f)
 
-    def __init__(self):
-        GObject.Object.__init__(self)
-        self._menu_ext = None
+def get_config_dir():
+    return os.path.join(GLib.get_user_config_dir(), 'gedit/jshint')
 
-    def do_activate(self):
-        Config.check_config_files()
-
-        self._menu_ext = self.extend_menu("tools-section")
-        item = Gio.MenuItem.new("Check with JSHint", "win.check-with-jshint")
-        self._menu_ext.append_menu_item(item)
-
-        self.app.set_accels_for_action("win.check-with-jshint", ["<Ctrl>J"])
-
-    def do_deactivate(self):
-        self.app.set_accels_for_action("win.check-with-jshint", [])
-        self._menu_ext = None
+def get_options_file():
+    return os.path.join(get_config_dir(), "options.json")
