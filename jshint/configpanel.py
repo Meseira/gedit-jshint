@@ -41,7 +41,7 @@ class ConfigPanel(object):
         #page.add(Gtk.Label("Environments options"))
         #self._widget.append_page(page, Gtk.Label("Environments"))
 
-    @property
-    def widget(self):
+    def get_widget(self):
         """Get the underlying Gtk widget."""
+
         return self._widget

@@ -51,7 +51,7 @@ class WindowActivatable(GObject.Object, Gedit.WindowActivatable,
         if not self._config_panel:
             self._config_panel = ConfigPanel()
 
-        return self._config_panel.widget
+        return self._config_panel.get_widget()
 
     def do_deactivate(self):
         self._jshint = None
