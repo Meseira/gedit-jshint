@@ -87,12 +87,13 @@ class OutputPanel(Gtk.ScrolledWindow):
 
             if "errors" in report.keys():
                 for item in report["errors"]:
-                    message = "{}:{} {}".format(
-                        item["line"], item["character"],
-                        urllib.request.unquote(item["reason"]))
-                    self._tree_view.get_model().append([
-                        item["line"], item["character"],
-                        message, "white"])
+                    if item: # Item can be None due to maxerr
+                        message = "{}:{} {}".format(
+                                item["line"], item["character"],
+                                urllib.request.unquote(item["reason"]))
+                        self._tree_view.get_model().append([
+                            item["line"], item["character"],
+                            message, "white"])
 
             if not ("unused" in report.keys() or "errors" in report.keys()):
                 # No error, perfect code!
