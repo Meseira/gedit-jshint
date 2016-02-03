@@ -24,7 +24,18 @@ class ConfigPanel(object):
 
     def __init__(self):
         #self._widget = Gtk.Notebook()
-        self._widget = Gtk.Label("Configuration panel for JSHint Plugin")
+        #self._widget = Gtk.Label("Configuration panel for JSHint Plugin")
+        self._widget = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
+
+        self._widget.pack_start(
+                Gtk.Label("Options selector comes here"),
+                True, True, 0)
+        self._widget.pack_start(
+                Gtk.Separator(orientation=Gtk.Orientation.HORIZONTAL),
+                True, True, 0)
+        self._widget.pack_start(
+                Gtk.Label("Global options come here"),
+                True, True, 0)
 
         #grid = Gtk.Grid()
         #for i in range(30):
