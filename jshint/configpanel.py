@@ -28,8 +28,18 @@ class ConfigPanel(Gtk.Box):
                 spacing=10)
 
         # Option selector panel
-        selector_panel = Gtk.Frame(label="Options")
-        selector_panel.add(Gtk.Label("Big selector goes here"))
+        selector_panel = Gtk.Notebook()
+        selector_panel.append_page(
+                Gtk.Label("Enforcing options"),
+                Gtk.Label("Enforcing"))
+        selector_panel.append_page(
+                Gtk.Label("Relaxing options"),
+                Gtk.Label("Relaxing"))
+        selector_panel.append_page(
+                Gtk.Label("Environments options"),
+                Gtk.Label("Environments"))
+        for child in selector_panel.get_children():
+            selector_panel.child_set_property(child, "tab_expand", True)
 
         # Global options panel
         global_panel = Gtk.Box(
