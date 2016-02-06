@@ -23,6 +23,8 @@ import tempfile
 
 from gi.repository import Gedit
 
+from . import config as Config
+
 __all__ = ("JSHint", )
 
 class JSHint(object):
@@ -79,7 +81,8 @@ class JSHint(object):
                 self._nodejs_bin,
                 self._path_run,
                 self._path_jshint,
-                f.name])
+                f.name,
+                Config.get_options_file()])
             cmd_array = shlex.split(cmd)
 
             try:

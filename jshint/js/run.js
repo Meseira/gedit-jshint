@@ -14,15 +14,22 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-(function (jshint_script, target_file) {
+(function (jshint_script, target_file, options_file) {
   "use strict";
 
   var fs = require('fs');
   var JSHINT = require(jshint_script).JSHINT;
 
+  var options = {};
+  try {
+    options = require(options_file);
+  } catch(err) {
+    /* An error occurred */
+  }
+
   var array = fs.readFileSync(target_file).toString().split("\n");
 
-  JSHINT(array, {}, {});
+  JSHINT(array, options, {});
   console.log(JSON.stringify(JSHINT.data()))
 
-}(process.argv[2], process.argv[3]));
+}(process.argv[2], process.argv[3], process.argv[4]));
