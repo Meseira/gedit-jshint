@@ -30,7 +30,8 @@ class ConfigPanel(Gtk.Box):
     def __init__(self):
         Gtk.Box.__init__(self,
                 orientation=Gtk.Orientation.VERTICAL,
-                spacing=10)
+                spacing=10,
+                border_width=10)
 
         # Option selector panel
         selector_panel = Gtk.Notebook()
