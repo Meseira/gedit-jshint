@@ -15,7 +15,12 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import json
+import sys
+
 from gi.repository import Gtk
+
+from . import config as Config
 
 __all__ = ("ConfigPanel", )
 
@@ -53,7 +58,21 @@ class ConfigPanel(Gtk.Box):
         spin.set_numeric(True)
         spin.set_range(1, 999)
         spin.set_increments(1, 10)
-        spin.set_value(50)
+
+        initial_value = 50 # Default
+        with open(Config.get_options_file(), "r") as f:
+            try:
+                data = json.load(f)
+            except ValueError as e:
+                print("JSHint Plugin: error in options file:\n" + str(e),
+                        file=sys.stderr)
+            else:
+                if ("maxerr" in data.keys() and
+                        isinstance(data["maxerr"], int) and
+                        data["maxerr"] > 0):
+                    initial_value = data["maxerr"]
+        spin.set_value(initial_value)
+
         grid.attach(Gtk.Label("Maximum amount of warnings:", xalign=0),
                 0, 0, 1, 1)
         grid.attach(spin, 1, 0, 1, 1)
