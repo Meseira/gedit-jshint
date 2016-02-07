@@ -17,8 +17,6 @@
 
 from gi.repository import GObject, Gedit, Gio
 
-from . import config as Config
-
 class AppActivatable(GObject.Object, Gedit.AppActivatable):
     __gtype_name__ = "JSHintAppActivatable"
 
@@ -29,8 +27,6 @@ class AppActivatable(GObject.Object, Gedit.AppActivatable):
         self._menu_ext = None
 
     def do_activate(self):
-        Config.check_config_files()
-
         self._menu_ext = self.extend_menu("tools-section")
         item = Gio.MenuItem.new("Check with JSHint", "win.check-with-jshint")
         self._menu_ext.append_menu_item(item)
