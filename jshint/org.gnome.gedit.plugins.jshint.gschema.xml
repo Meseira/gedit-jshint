@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist>
+  <schema id="org.gnome.gedit.plugins.jshint" path="/org/gnome/gedit/plugins/jshint/">
+    <key name="maxerr" type="i">
+      <range min="1" max="999" />
+      <default>50</default>
+      <description>JSHint option maxerr</description>
+    </key>
+  </schema>
+
+  <schema id="org.gnome.gedit.plugins.jshint.enforcing" path="/org/gnome/gedit/plugins/jshint/enforcing/">
+    <key name="bitwise" type="b">
+      <default>false</default>
+      <description>JSHint option bitwise</description>
+    </key>
+  </schema>
+</schemalist>
