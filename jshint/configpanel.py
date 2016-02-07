@@ -19,12 +19,15 @@ from gi.repository import Gtk
 
 __all__ = ("ConfigPanel", )
 
-class ConfigPanel(object):
+class ConfigPanel(Gtk.Box):
     """Panel to configure the JSHint plugin."""
 
     def __init__(self):
+        Gtk.Box.__init__(self)
+
         #self._widget = Gtk.Notebook()
-        self._widget = Gtk.Label("Configuration panel for JSHint Plugin")
+        label = Gtk.Label("Configuration panel for JSHint Plugin")
+        self.pack_start(label, True, True, 0)
 
         #grid = Gtk.Grid()
         #for i in range(30):
@@ -40,8 +43,3 @@ class ConfigPanel(object):
         #page = Gtk.Box()
         #page.add(Gtk.Label("Environments options"))
         #self._widget.append_page(page, Gtk.Label("Environments"))
-
-    def get_widget(self):
-        """Get the underlying Gtk widget."""
-
-        return self._widget
