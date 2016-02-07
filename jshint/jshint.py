@@ -15,7 +15,6 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import os.path
 import shlex
 import subprocess
 import sys
@@ -28,11 +27,10 @@ __all__ = ("JSHint", )
 class JSHint(object):
     """Helper class to handle JSHint script."""
 
-    def __init__(self):
+    def __init__(self, path):
         # JavaScript sources
-        self._path_js = os.path.join(os.path.dirname(__file__), "js")
-        self._path_jshint = os.path.join(self._path_js, "jshint.js")
-        self._path_run = os.path.join(self._path_js, "run.js")
+        self._path_jshint = path.jshint_script
+        self._path_run = path.run_script
 
         # Locate Node.js binary
         self._nodejs_bin = None

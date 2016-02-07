@@ -20,8 +20,10 @@ from gi.repository import GObject, Gedit, Gio, PeasGtk
 from .configpanel import ConfigPanel
 from .jshint import JSHint
 from .outputpanel import OutputPanel
+from .path import Path
 
-class WindowActivatable(GObject.Object, Gedit.WindowActivatable,
+class WindowActivatable(GObject.Object,
+        Gedit.WindowActivatable,
         PeasGtk.Configurable):
     __gtype_name__ = "JSHintWindowActivatable"
 
@@ -33,6 +35,7 @@ class WindowActivatable(GObject.Object, Gedit.WindowActivatable,
         self._action = None
         self._jshint = None
         self._output_panel = None
+        self._path = None
 
     def do_activate(self):
         self._action = Gio.SimpleAction(name="check-with-jshint")
@@ -44,13 +47,15 @@ class WindowActivatable(GObject.Object, Gedit.WindowActivatable,
         bottom_panel.add_titled(self._output_panel,
                 "JSHintOutputPanel", "JSHint")
 
-        self._jshint = JSHint()
+        self._path = Path(self.plugin_info.get_module_dir())
+        self._jshint = JSHint(self._path)
 
     def do_create_configure_widget(self):
         return ConfigPanel()
 
     def do_deactivate(self):
         self._jshint = None
+        self._path = None
         self._output_panel = None
 
         self.window.remove_action("check-with-jshint")
