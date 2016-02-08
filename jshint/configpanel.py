@@ -15,7 +15,7 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from gi.repository import Gtk
+from gi.repository import Gio, Gtk
 
 __all__ = ("ConfigPanel", )
 
@@ -23,7 +23,16 @@ class ConfigPanel(Gtk.Box):
     """Panel to configure the JSHint plugin."""
 
     def __init__(self):
-        Gtk.Box.__init__(self)
+        Gtk.Box.__init__(self, orientation=Gtk.Orientation.VERTICAL)
 
         label = Gtk.Label("Configuration panel for JSHint Plugin")
         self.pack_start(label, True, True, 0)
+
+        if "org.gnome.gedit.plugins.jshint" in Gio.Settings.list_schemas():
+            label = Gtk.Label()
+            label.set_markup("<b>With GSettings</b>")
+            self.pack_start(label, True, True, 0)
+        else:
+            label = Gtk.Label()
+            label.set_markup('<span color="#FF0000">Without GSettings</span>')
+            self.pack_start(label, True, True, 0)
