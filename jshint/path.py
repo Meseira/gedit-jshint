@@ -38,11 +38,11 @@ class Path(object):
     @property
     def jshint_script(self):
         """Path to JSHint script"""
-        # TODO Check if file exists
-        return os.path.join(self.js_dir, "jshint.js")
+        script = os.path.join(self.js_dir, "jshint.js")
+        return script if os.path.exists(script) else None
 
     @property
     def run_script(self):
         """Path to the script running JSHint"""
-        # TODO Check if file exists
-        return os.path.join(self.js_dir, "run.js")
+        script = os.path.join(self.js_dir, "run.js")
+        return script if os.path.exists(script) else None

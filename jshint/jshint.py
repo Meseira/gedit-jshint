@@ -60,9 +60,17 @@ class JSHint(object):
         report or an empty object if an error occurred.
         """
 
-        if not self._nodejs_bin:
+        if self._nodejs_bin is None:
             print("JSHint Plugin: cannot find Node.js binary", file=sys.stderr)
             return "{}"
+
+        if self._path_jshint is None:
+            print("JSHint Plugin: cannot find jshint.js", file=sys.stderr)
+            return"{}"
+
+        if self._path_run is None:
+            print("JSHint Plugin: cannot find run.js", file=sys.stderr)
+            return"{}"
 
         text = doc.get_text(
                 doc.get_start_iter(),
