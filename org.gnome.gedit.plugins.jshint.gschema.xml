@@ -14,4 +14,18 @@
       <description>JSHint option bitwise</description>
     </key>
   </schema>
+
+  <schema id="org.gnome.gedit.plugins.jshint.relaxing" path="/org/gnome/gedit/plugins/jshint/relaxing/">
+    <key name="asi" type="b">
+      <default>false</default>
+      <description>JSHint option asi</description>
+    </key>
+  </schema>
+
+  <schema id="org.gnome.gedit.plugins.jshint.environments" path="/org/gnome/gedit/plugins/jshint/environments/">
+    <key name="browser" type="b">
+      <default>false</default>
+      <description>JSHint option browser</description>
+    </key>
+  </schema>
 </schemalist>
