@@ -23,16 +23,32 @@ class ConfigPanel(Gtk.Box):
     """Panel to configure the JSHint plugin."""
 
     def __init__(self):
-        Gtk.Box.__init__(self, orientation=Gtk.Orientation.VERTICAL)
+        Gtk.Box.__init__(self,
+                orientation=Gtk.Orientation.VERTICAL,
+                spacing=10,
+                border_width=10)
 
-        label = Gtk.Label("Configuration panel for JSHint Plugin")
-        self.pack_start(label, True, True, 0)
+        schemas = Gio.Settings.list_schemas()
+        has_jshint_schemas = (
+                "org.gnome.gedit.plugins.jshint" in schemas and
+                "org.gnome.gedit.plugins.jshint.enforcing" in schemas and
+                "org.gnome.gedit.plugins.jshint.relaxing" in schemas and
+                "org.gnome.gedit.plugins.jshint.environments" in schemas)
 
-        if "org.gnome.gedit.plugins.jshint" in Gio.Settings.list_schemas():
+        if has_jshint_schemas:
             label = Gtk.Label()
             label.set_markup("<b>With GSettings</b>")
             self.pack_start(label, True, True, 0)
         else:
             label = Gtk.Label()
-            label.set_markup('<span color="#FF0000">Without GSettings</span>')
+            label.set_markup("<b>Configuration is currently not available</b>")
+            self.pack_start(label, True, True, 0)
+
+            label = Gtk.Label()
+            label.set_markup(
+                    "GSettings schemas for the JSHint plugin are not "
+                    "installed.\n"
+                    "Please, read installation instructions on the "
+                    "<a href=\"https://github.com/meseira/gedit-jshint\" "
+                    "title=\"JSHint plugin for Gedit\">plugin's webpage</a>.")
             self.pack_start(label, True, True, 0)
