@@ -12,7 +12,8 @@ This plugin is for Gedit 3 and is **not compatible with Gedit 2**.
 
 The JavaScript runtime environment [Node.js][4] is needed to run the JSHint script. In a Debian-like operating system, simply install the package `nodejs`:
 ```
-apt-get install nodejs
+sudo apt-get update
+sudo apt-get install nodejs
 ```
 
 Installation
@@ -28,15 +29,20 @@ Installation
 
 4. Activate the plugin in the `Gedit Preferences`, go to the `Plugins` tab and check the box next to `JSHint`.
 
+5. **Optional** To activate the plugin's configuration panel, some GSettings schemas need to be installed. Without this step, only [inline configuration][10] is available. Install the schemas with the commands:
+
+    sudo cp org.gnome.gedit.plugins.jshint.gschema.xml /usr/share/glib-2.0/schemas/
+    sudo glib-compile-schemas /usr/share/glib-2.0/schemas/
+
 Usage
 -----
 
-When a JavaScript source code file is active, you can check it with `Tools > Check with JSHint` or with the accelerator `Ctrl+J`. The results are automatically displayed in the bottom panel.
+When a JavaScript source code file is active, you can check it with `Tools > Check with JSHint` or with the accelerator `Ctrl+J`. The results are automatically displayed in the bottom panel. See the `Preferences` of the plugin to modify the JSHint options.
 
 Notes
 -----
 
-For now, the plugin only checks JavaScript source code with the JSHint default parameters. Allowing to modify the options is in the TODO list and will be available soon, hopefully. However, [inline configuration][10] can be used to set JSHint options.
+By default, the plugin only checks JavaScript source code with the JSHint default parameters. JSHint options can be modified through the `Preferences` panel of the plugin (not all options are available for now, this is a work in progress). [Inline configuration][10] can be used to set JSHint options for a specific file.
 
 License
 -------
