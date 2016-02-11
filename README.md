@@ -22,9 +22,9 @@ Installation
 
 1. Download this repository by clicking the *Download ZIP* button at the top of the [GitHub page][5] or clone it with the following command:
 
-```sh
-        git clone https://github.com/Meseira/gedit-jshint.git
-```
+    ```sh
+    git clone https://github.com/Meseira/gedit-jshint.git
+    ```
 
 2. Copy the file `jshint.plugin` and the folder `jshint` to `~/.local/share/gedit/plugins/` (you will need to create this folder if it does not already exist).
 
@@ -34,10 +34,10 @@ Installation
 
 5. **(Optional)** To activate the plugin's configuration panel, some GSettings schemas need to be installed. Without this step, only [inline configuration][10] is available. Install the schemas with the commands:
 
-```sh
-        sudo cp org.gnome.gedit.plugins.jshint.gschema.xml /usr/share/glib-2.0/schemas/
-        sudo glib-compile-schemas /usr/share/glib-2.0/schemas/
-```
+    ```sh
+    sudo cp org.gnome.gedit.plugins.jshint.gschema.xml /usr/share/glib-2.0/schemas/
+    sudo glib-compile-schemas /usr/share/glib-2.0/schemas/
+    ```
 
 Usage
 -----
