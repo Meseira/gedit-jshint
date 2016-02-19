@@ -55,3 +55,11 @@ class ConfigPanel(Gtk.Box):
         label = Gtk.Label()
         label.set_markup("<b>With GSettings</b>")
         self.pack_start(label, True, True, 0)
+
+        spin = Gtk.SpinButton()
+        settings_global = Gio.Settings.new("org.gnome.gedit.plugins.jshint")
+        print("maxerr: {}".format(settings_global.get_value("maxerr")))
+        #settings_global.bind("maxerr",
+        #        spin, "value",
+        #        Gio.SettingsBindFlags.DEFAULT)
+        self.pack_start(spin, True, True, 0)
