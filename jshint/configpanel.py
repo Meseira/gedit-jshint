@@ -58,8 +58,9 @@ class ConfigPanel(Gtk.Box):
 
         spin = Gtk.SpinButton()
         settings_global = Gio.Settings.new("org.gnome.gedit.plugins.jshint")
-        print("maxerr: {}".format(settings_global.get_value("maxerr")))
-        #settings_global.bind("maxerr",
-        #        spin, "value",
-        #        Gio.SettingsBindFlags.DEFAULT)
+        spin.set_numeric(True)
+        spin.set_range(*settings_global.get_range("maxerr")[1])
+        spin.set_increments(1, 10)
+        settings_global.bind("maxerr", spin, "value",
+                Gio.SettingsBindFlags.DEFAULT)
         self.pack_start(spin, True, True, 0)
