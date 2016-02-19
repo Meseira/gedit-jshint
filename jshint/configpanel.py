@@ -36,9 +36,7 @@ class ConfigPanel(Gtk.Box):
                 "org.gnome.gedit.plugins.jshint.environments" in schemas)
 
         if has_jshint_schemas:
-            label = Gtk.Label()
-            label.set_markup("<b>With GSettings</b>")
-            self.pack_start(label, True, True, 0)
+            self._init_with_schemas()
         else:
             label = Gtk.Label()
             label.set_markup("<b>Configuration is currently not available</b>")
@@ -52,3 +50,8 @@ class ConfigPanel(Gtk.Box):
                     "<a href=\"https://github.com/meseira/gedit-jshint\" "
                     "title=\"JSHint plugin for Gedit\">plugin's webpage</a>.")
             self.pack_start(label, True, True, 0)
+
+    def _init_with_schemas(self):
+        label = Gtk.Label()
+        label.set_markup("<b>With GSettings</b>")
+        self.pack_start(label, True, True, 0)
