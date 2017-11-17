@@ -18,6 +18,8 @@ apt-get install nodejs
 Installation
 ------------
 
+For easy automatic installation you can install this plugin using the [Gedit Plugin Installer](https://github.com/lwindolf/gedit-plugininstaller/) or you can do it manually: 
+
 1. Download this repository by clicking the `Download ZIP` button at the top of the [GitHub page][5] or clone it with the following command:
 
     git clone https://github.com/Meseira/gedit-jshint.git
